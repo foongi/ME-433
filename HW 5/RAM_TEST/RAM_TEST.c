@@ -178,12 +178,19 @@ int main()
 
         for(int i = 0; i < 1000; i++) // one of these per second
         {
+            absolute_time_t t1 = get_absolute_time();
+            uint64_t t = to_us_since_boot(t1);
+
             float duty_cycle = readFloat(address);
             writeDAC(0, duty_cycle); // read float and give it to DAC
-            printf("Duty cycle (out of 1): %lf\n", duty_cycle);
+            // printf("Duty cycle (out of 1): %lf\n", duty_cycle);
 
             address += 4;
-            sleep_ms(1);
+
+            // Delay till 1 ms has passed
+            while(to_us_since_boot(get_absolute_time()) - t < 1000) { // 1000 microseconds in 1 millisecond
+                ;
+            }
         }
     }
 }
