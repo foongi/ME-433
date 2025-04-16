@@ -57,11 +57,11 @@ int main()
     printf("Multiplication: %llu\n", post_mult-post_sub);
     printf("Division: %llu\n", post_div-post_mult);
     printf("\n");
-    printf("Clock cycles per operation: \n"); // Divide by 1000 to convert to time per 1 operation
-    printf("Addition: %d\n", (int) ((post_add-start)/6.667)); // then divide again by 6.667ns to get to cycles 
-    printf("Subtraction: %d\n", (int) ((post_sub-post_add)/6.667)); // Since we were in us, though, this nets out
-    printf("Multiplication: %d\n", (int) ((post_mult-post_sub)/6.667)); // to just /6.667 b/c the 1000s cancel
-    printf("Division: %d\n", (int) ((post_div-post_mult)/6.667));
+    printf("Clock cycles per operation (roughly - including overhead): \n"); // Divide by 1000 to convert to time per 1 operation
+    printf("Addition: %lf\n", (post_add-start)/6.667); // then divide again by 6.667ns to get to cycles 
+    printf("Subtraction: %lf\n", (post_sub-post_add)/6.667); // Since we were in us, though, this nets out
+    printf("Multiplication: %lf\n", (post_mult-post_sub)/6.667); // to just /6.667 b/c the 1000s cancel
+    printf("Division: %lf\n", (post_div-post_mult)/6.667);\
 
     while(true) {
         ;
