@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "hardware/adc.h"
 #include "hardware/i2c.h"
 #include "ssd1306.h"
 #include "font.h"
@@ -81,30 +82,30 @@ int main()
     gpio_pull_up(I2C_SCL);
     // For more examples of I2C use see https://github.com/raspberrypi/pico-examples/tree/master/i2c
 
+    adc_init(); // init the adc module
+    adc_gpio_init(26); // set ADC0 pin to be adc input instead of GPIO
+    adc_select_input(0); // select to read from ADC0
+
     ssd1306_setup();
     MCP_setup(ADDR);
 
+    int delta = 0;
 
     while (true) {
-        printf("Hello, world!\n");
+        unsigned int start = to_us_since_boot(get_absolute_time());  
 
-        int i = 0;
-        char message[50]; 
-        sprintf(message, "hello my name is ethan me", i); 
-        draw_message(0,0,message); 
-        draw_message(0,8,message); 
-        draw_message(0,16,message); 
-        draw_message(0,24,message); 
-        ssd1306_update(); 
+        uint16_t result = adc_read();
+        float volts = ((result * 3.3/(1 << 12)));
 
+        char message[50];
+        sprintf(message, "ADC0 reading =  %lf", volts);
+        draw_message(0, 0, message);
 
-        set_pin(ADDR, 0x0a, 0x80);
-        sleep_ms(1000);
-
-        ssd1306_clear();
+        sprintf(message, "FPS = %.2lf", (1000000.0)/delta);
+        draw_message(70, 24, message);
         ssd1306_update();
-        set_pin(ADDR, 0x0a, 0x00);
 
-        sleep_ms(1000);
+
+        delta = to_us_since_boot(get_absolute_time()) - start;
     }
 }

@@ -56,6 +56,7 @@ target_include_directories(I2C_Display PRIVATE
 # Add any user requested libraries
 target_link_libraries(I2C_Display 
         hardware_i2c
+        hardware_adc
         )
 
 pico_add_extra_outputs(I2C_Display)
