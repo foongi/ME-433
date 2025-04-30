@@ -1,0 +1,1 @@
+/"Program Files"/PuTTY/putty -serial -sercfg 230400 "COM3"
