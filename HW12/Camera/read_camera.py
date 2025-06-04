@@ -7,7 +7,7 @@
 import matplotlib.pyplot as plt 
 
 import serial
-ser = serial.Serial('COM3')
+ser = serial.Serial('COM5')
 print('Opening port: ')
 print(ser.name)
 
