@@ -11,10 +11,10 @@
 #define WRAP 12500
 
 #define SETPOINT 40  // Center of the image
-#define BASE_SPEED 0.5f
-#define KP 0.007f
-#define KI 0.0000f
-#define KD 0.001f
+#define BASE_SPEED 0.450f
+#define KP 0.0028f
+#define KI 0.00000f
+#define KD 0.0008f
 
 
 void setup_motors()
@@ -102,28 +102,18 @@ int main()
         setSaveImage(1);
         while(getSaveImage()==1){}
         convertImage();
-        int com = findLine(50); // calculate the position of the center of the ine
+        int com = findLine(45); // calculate the position of the center of the ine
         // setPixel(IMAGESIZEY/2,com,0,255,0); // draw the center so you can see it in python
         // printImage();
 
         
 
-        // In your main loop:
-        com_filtered = alpha * com + (1 - alpha) * com_filtered;
-
-        float error = SETPOINT - com_filtered;
-
-
-        // Compute time delta
-        absolute_time_t now = get_absolute_time();
-        float dt = absolute_time_diff_us(last_time, now) / 1e6f;
-        last_time = now;
-
-
+        // filter the center of mass to smooth it.
+        float error = SETPOINT - com;
 
         // PID terms
-        integral += error * dt;
-        float derivative = (error - last_error) / dt;
+        integral += error;
+        float derivative = error - last_error;
         last_error = error;
 
         float correction = KP * error + KI * integral + KD * derivative;
@@ -138,7 +128,7 @@ int main()
         if (right_speed > 1.0f) right_speed = 1.0f;
         if (right_speed < -1.0f) right_speed = -1.0f;
 
-        set_motor1(left_speed - 0.05);
+        set_motor1(left_speed - 0.07);
         set_motor2(right_speed);
     }
 }
