@@ -1,7 +1,7 @@
 import pgzrun
 
 import serial
-ser = serial.Serial('COM3') # the name of your port here
+ser = serial.Serial('COM6') # the name of your port here
 print('Opening port: ' + str(ser.name))
 
 import numpy as np
